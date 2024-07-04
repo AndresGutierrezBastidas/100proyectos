@@ -1,11 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+
+<style>
+    :root{
+        color-scheme: dark;
+        --yellow : #ffdf08;
+        --green : #00d4f9;
+        --rosa : #FF005C
+    }
+    body{
+        font-family: Menlo,monospace;
+        display: grid;
+        justify-content: center;
+        margin-top: 32px;
+        padding: 16px;
+    }
+    section{
+        padding: 16px;
+        display: flex; 
+        flex-direction: column;
+        gap: 10px;
+        max-width: 400px;
+    }
+    time{
+        color: var(--yellow);
+    }
+    input{
+        z-index: -999;
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+    p{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px 8px
+    }
+</style>
 <body>
-    
+    <main>
+        <!--Se declara una seccion para realizar el juego-->
+        <section id="game">
+            <time></time>
+            <p id="game-text"></p>
+            <!--El autofocus lo usamos para que siempre que entre
+            a la pagina se marque ese input-->
+            <input autofocus>
+        </section>    
+    </main>
 </body>
-</html>
+ 
+<script>
+    // seleccionar a los elementos cambiantes del html
+    // se usa $ para identificar los elementos que son html
+    const $time = document.querySelector('time')
+    const $text = document.querySelector('p')
+    const $intput = document.querySelector('input')
+
+    // para las variables inamovible todo en mayusculas
+    // y sepradas por un "_"
+    const INITIAL_TIME = 3;
+    const TEXT ='texto inicial para el proyecto de typing es por ello que se coloca esto bla bla bla';
+    
+    let words = []
+    let currentTime = INITIAL_TIME;
+    initGame();
+    function initGame() {
+        $time.textContent = INITIAL_TIME;
+        words = TEXT.split(' ').slice(0,32)
+        $text.innerHTML = words.map((word)=>{
+            const letters = word.split('')
+            return `<span id="word">
+                ${letters
+                .map(letter=>`<span id = "letter">${letter}</span>`).join('')}
+                </span>`
+        }).join('')
+        const $firstWord = $text.querySelector('span');
+        $firstWord.classList.add('active')
+        $firstWord.querySelector('span').classList.add('active')
+
+        
+        const intevarID = setInterval(()=>{
+            currentTime--
+            $time.textContent =currentTime;
+            if(currentTime === 0){
+                clearInterval(intevarID)
+                gameOver()
+            }
+        },1000)
+    }
+    function gameOver() {
+        console.log("game over");
+    }
+</script>
